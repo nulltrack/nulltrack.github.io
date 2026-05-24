@@ -3,42 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nulltrack</title>
+    <title>Nulltrack — DECTET LLC</title>
+    <meta name="description" content="Nulltrack is a mobile-native audio tracker for iOS, made by DECTET LLC.">
     <style>
+        :root {
+            --bg: #0a0a0a;
+            --panel: #111;
+            --ink: #e0e0e0;
+            --dim: #888;
+            --rule: #1f1f1f;
+            --accent: #8aff8a;
+        }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; }
         body {
-            background: #0a0a0a;
-            color: #e0e0e0;
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Mono', monospace;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Mono', ui-monospace, monospace;
+            line-height: 1.55;
         }
-        .container {
-            text-align: center;
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem 2rem;
         }
-        h1 {
-            font-size: 2rem;
-            letter-spacing: 0.15em;
-            margin-bottom: 0.5rem;
+        header.brand {
+            border-bottom: 1px solid var(--rule);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        header.brand h1 {
+            font-size: 2.25rem;
+            letter-spacing: 0.18em;
+            margin: 0 0 0.35rem 0;
+        }
+        header.brand .tagline {
+            color: var(--dim);
+            font-size: 0.95rem;
+            letter-spacing: 0.04em;
+        }
+        section {
+            margin-bottom: 2.5rem;
+        }
+        section h2 {
+            font-size: 0.8rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--dim);
+            margin: 0 0 0.75rem 0;
+            font-weight: 600;
+        }
+        section p { margin: 0 0 0.75rem 0; }
+        .org-block {
+            background: var(--panel);
+            border: 1px solid var(--rule);
+            padding: 1.25rem 1.25rem;
+            border-radius: 4px;
+        }
+        .org-block .org-name {
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.4rem;
+        }
+        .org-block address {
+            font-style: normal;
+            color: var(--dim);
+            font-size: 0.9rem;
+            white-space: pre-line;
         }
         footer {
-            position: fixed;
-            bottom: 1rem;
-            left: 0;
-            right: 0;
-            text-align: center;
+            border-top: 1px solid var(--rule);
+            margin-top: 3rem;
+            padding-top: 1.25rem;
+            color: var(--dim);
             font-size: 0.75rem;
-            color: #666;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.05em;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem 1.5rem;
+            justify-content: space-between;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>NULLTRACK</h1>
-    </div>
-    <footer>&copy; 2026 DECTET LLC. All rights reserved.</footer>
+    <main>
+        <header class="brand">
+            <h1>NULLTRACK</h1>
+            <div class="tagline">A mobile-native audio tracker for iOS.</div>
+        </header>
+
+        <section>
+            <h2>About</h2>
+            <p>Nulltrack is a phone-native audio tracker: a step-sequenced music workstation designed from the ground up for touch screens. It is developed and published by DECTET LLC.</p>
+        </section>
+
+        <section>
+            <h2>Product</h2>
+            <p>Nulltrack for iOS is currently in development and will be released on the Apple App Store. Updates will be posted here as the release approaches.</p>
+        </section>
+
+        <section>
+            <h2>Contact</h2>
+            <p>Support and general inquiries: <a href="mailto:support@nulltrack.app">support@nulltrack.app</a></p>
+            <p>Phone: <a href="tel:+18045370497">(804) 537-0497</a></p>
+        </section>
+
+        <section>
+            <h2>Organization</h2>
+            <div class="org-block">
+                <div class="org-name">DECTET LLC</div>
+                <address>Henrico, Virginia, United States
+<a href="mailto:support@nulltrack.app">support@nulltrack.app</a>
+<a href="tel:+18045370497">(804) 537-0497</a></address>
+            </div>
+        </section>
+
+        <footer>
+            <span>&copy; 2026 DECTET LLC. All rights reserved.</span>
+            <span>
+                <a href="/privacy.html">Privacy</a>
+                &nbsp;·&nbsp;
+                <a href="/terms.html">Terms</a>
+            </span>
+        </footer>
+    </main>
 </body>
 </html>
