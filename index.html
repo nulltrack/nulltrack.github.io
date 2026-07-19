@@ -5,74 +5,269 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nulltrack — Audio tracker for iOS</title>
     <meta name="description" content="Nulltrack is a phone-native audio tracker for iOS: a step-sequenced music workstation built for touch.">
+    <link rel="icon" type="image/png" href="/assets/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=VT323&display=swap" rel="stylesheet">
     <style>
+        /* ── Phosphor palette (Theme.swift, .phosphor) ─────────────── */
         :root {
-            --bg: #0a0a0a;
-            --panel: #111;
-            --ink: #e0e0e0;
-            --dim: #888;
-            --rule: #1f1f1f;
-            --accent: #8aff8a;
+            --bg: #0E0D0B;
+            --surface: #1E1D1A;
+            --elevated: #2E2D29;
+            --highlight: #504C46;
+            --ink: #E8DCC8;
+            --ink-sec: #B0A490;
+            --dim: #A0937F;
+            --accent: #DDA343;
+            --accent-patina: #6B9E8A;
+            --accent-rose: #C47A8A;
+            --playing: #A4B840;
+            --playhead: #FFB840;
+            --pill-border: #736B5E;
+            --rule: #2E2D29;
+            --ink-on-accent: #1E1814;
+            --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+            --crt: 'VT323', monospace;
         }
         * { box-sizing: border-box; }
         html, body { margin: 0; padding: 0; }
+        html { scrollbar-color: var(--highlight) var(--bg); }
         body {
             background: var(--bg);
             color: var(--ink);
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Mono', ui-monospace, monospace;
-            line-height: 1.55;
+            font-family: var(--mono);
+            font-size: 15px;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
+        ::selection { background: var(--accent); color: var(--ink-on-accent); }
         a { color: var(--accent); text-decoration: none; }
-        a:hover { text-decoration: underline; }
+        a:hover { text-decoration: underline; text-shadow: 0 0 8px rgba(221, 163, 67, 0.55); }
+
+        /* ── CRT atmosphere: scanlines, grain, vignette ────────────── */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0)    0px,
+                rgba(0, 0, 0, 0)    2px,
+                rgba(0, 0, 0, 0.14) 3px,
+                rgba(0, 0, 0, 0)    4px
+            );
+        }
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 4;
+            pointer-events: none;
+            background:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"),
+                radial-gradient(ellipse 120% 90% at 50% 40%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.42) 100%);
+        }
+
         main {
-            max-width: 720px;
+            position: relative;
+            z-index: 1;
+            max-width: 860px;
             margin: 0 auto;
-            padding: 4rem 1.5rem 2rem;
+            padding: 3.5rem 1.5rem 2rem;
         }
+
+        /* ── Boot-in reveal ────────────────────────────────────────── */
+        @keyframes boot {
+            0%   { opacity: 0; transform: translateY(6px); filter: brightness(2.2) blur(1px); }
+            60%  { opacity: 1; filter: brightness(1.35) blur(0); }
+            100% { opacity: 1; transform: none; filter: none; }
+        }
+        .boot { animation: boot 0.7s ease-out both; }
+        .boot-1 { animation-delay: 0.05s; }
+        .boot-2 { animation-delay: 0.22s; }
+        .boot-3 { animation-delay: 0.38s; }
+        .boot-4 { animation-delay: 0.52s; }
+        .boot-5 { animation-delay: 0.64s; }
+        .boot-6 { animation-delay: 0.76s; }
+        @media (prefers-reduced-motion: reduce) {
+            .boot { animation: none; }
+            * { animation-duration: 0.001s !important; transition: none !important; }
+        }
+
+        /* ── Header / hero ─────────────────────────────────────────── */
         header.brand {
-            border-bottom: 1px solid var(--rule);
-            padding-bottom: 1.5rem;
-            margin-bottom: 2.5rem;
+            text-align: center;
+            padding: 1.5rem 0 2rem;
         }
-        header.brand h1 {
-            font-size: 2.25rem;
-            letter-spacing: 0.18em;
-            margin: 0 0 0.35rem 0;
+        .wordmark {
+            width: min(440px, 86%);
+            height: auto;
+            filter: drop-shadow(0 0 18px rgba(255, 184, 64, 0.35));
         }
-        header.brand .tagline {
-            color: var(--dim);
+        .tagline {
+            color: var(--ink-sec);
             font-size: 0.95rem;
-            letter-spacing: 0.04em;
-        }
-        section {
-            margin-bottom: 2.5rem;
-        }
-        section h2 {
-            font-size: 0.8rem;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            color: var(--dim);
-            margin: 0 0 0.75rem 0;
-            font-weight: 600;
-        }
-        section p { margin: 0 0 0.75rem 0; }
-        .org-block {
-            background: var(--panel);
-            border: 1px solid var(--rule);
-            padding: 1.25rem 1.25rem;
-            border-radius: 4px;
-        }
-        .org-block .org-name {
-            font-weight: 600;
             letter-spacing: 0.08em;
-            margin-bottom: 0.4rem;
+            margin-top: 0.75rem;
         }
-        .org-block address {
-            font-style: normal;
+        .tagline .cursor {
+            display: inline-block;
+            width: 0.55em;
+            height: 1.05em;
+            vertical-align: text-bottom;
+            background: var(--accent);
+            margin-left: 2px;
+            animation: blink 1.1s steps(1) infinite;
+            box-shadow: 0 0 6px rgba(221, 163, 67, 0.7);
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* ── Transport-style status bar ────────────────────────────── */
+        .transport {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            justify-content: center;
+            gap: 0.4rem 1.4rem;
+            background: var(--surface);
+            border: 1px solid var(--rule);
+            border-radius: 6px;
+            padding: 0.65rem 1.1rem;
+            margin: 0 auto 3rem;
+            max-width: 620px;
+            font-family: var(--crt);
+            font-size: 1.35rem;
+            letter-spacing: 0.05em;
+            color: var(--ink);
+            text-shadow: 0 0 6px rgba(232, 220, 200, 0.25);
+        }
+        .transport .val { color: var(--playhead); text-shadow: 0 0 8px rgba(255, 184, 64, 0.5); }
+        .transport .lbl { color: var(--dim); font-size: 0.95rem; font-family: var(--mono); letter-spacing: 0.1em; }
+        .transport .led {
+            color: var(--playing);
+            text-shadow: 0 0 8px rgba(164, 184, 64, 0.8);
+            animation: blink 2.2s steps(1) infinite;
+        }
+
+        /* ── Section chrome (app-style section headers) ────────────── */
+        section { margin-bottom: 3.25rem; }
+        section > h2 {
+            font-size: 0.75rem;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin: 0 0 1rem 0;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(221, 163, 67, 0.35);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        section > h2::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, var(--pill-border), transparent);
+        }
+        section > h2 .idx {
             color: var(--dim);
-            font-size: 0.9rem;
-            white-space: pre-line;
+            font-weight: 400;
+            letter-spacing: 0.1em;
         }
+        section p { margin: 0 0 0.75rem 0; color: var(--ink-sec); }
+        section p strong { color: var(--ink); font-weight: 600; }
+
+        .lede { font-size: 1.02rem; color: var(--ink); }
+
+        /* ── Screenshot strip ──────────────────────────────────────── */
+        .shots {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 0.5rem 0.25rem 1rem;
+            scroll-snap-type: x proximity;
+            scrollbar-width: thin;
+        }
+        .shots figure {
+            margin: 0;
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+        }
+        .shots img {
+            display: block;
+            width: 218px;
+            height: auto;
+            border-radius: 14px;
+            border: 1px solid var(--pill-border);
+            background: var(--bg);
+            transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+        }
+        .shots figure:hover img {
+            border-color: var(--accent);
+            box-shadow: 0 0 22px rgba(221, 163, 67, 0.28);
+            transform: translateY(-3px);
+        }
+        .shots figcaption {
+            text-align: center;
+            color: var(--dim);
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            padding-top: 0.55rem;
+        }
+
+        /* ── Feature list as phrase-editor rows ────────────────────── */
+        .steps {
+            border: 1px solid var(--rule);
+            border-radius: 6px;
+            overflow: hidden;
+            background: var(--surface);
+        }
+        .step {
+            display: grid;
+            grid-template-columns: 3.2rem 4.6rem 1fr;
+            align-items: baseline;
+            padding: 0.6rem 0.9rem;
+            border-bottom: 1px solid var(--rule);
+            transition: background 0.15s ease;
+        }
+        .step:last-child { border-bottom: none; }
+        .step:hover { background: var(--elevated); }
+        .step .no {
+            color: var(--dim);
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .step .cmd {
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.14em;
+            text-shadow: 0 0 8px currentColor;
+        }
+        .step .desc { color: var(--ink-sec); font-size: 0.86rem; }
+        .step .desc b { color: var(--ink); font-weight: 600; }
+        /* phosphor phrase-color family */
+        .c-amber   { color: #E0A040; }
+        .c-gold    { color: #D8C060; }
+        .c-copper  { color: #C87858; }
+        .c-olive   { color: #A8985C; }
+        .c-khaki   { color: #B8A470; }
+        .c-deep    { color: #C89040; }
+        .c-rose    { color: #CC8C68; }
+        .c-patina  { color: #6B9E8A; }
+
+        /* ── Support / org ─────────────────────────────────────────── */
+        .org-block {
+            background: var(--surface);
+            border: 1px solid var(--rule);
+            padding: 1.25rem;
+            border-radius: 6px;
+        }
+
+        /* ── Footer ────────────────────────────────────────────────── */
         footer {
             border-top: 1px solid var(--rule);
             margin-top: 3rem;
@@ -85,36 +280,87 @@
             gap: 0.75rem 1.5rem;
             justify-content: space-between;
         }
+
+        @media (max-width: 540px) {
+            .wordmark { width: 76%; }
+            .transport { font-size: 1.15rem; gap: 0.3rem 1rem; }
+            .shots img { width: 178px; }
+            .step { grid-template-columns: 2.6rem 4.2rem 1fr; padding: 0.55rem 0.7rem; }
+        }
     </style>
 </head>
 <body>
     <main>
-        <header class="brand">
-            <h1>NULLTRACK</h1>
-            <div class="tagline">A mobile-native audio tracker for iOS.</div>
+        <header class="brand boot boot-1">
+            <img class="wordmark" src="/assets/wordmark.png" alt="NULLTRACK" width="660" height="190">
+            <div class="tagline">A mobile-native audio tracker for iOS.<span class="cursor" aria-hidden="true"></span></div>
         </header>
 
-        <section>
-            <h2>About</h2>
-            <p>Nulltrack is a phone-native audio tracker: a step-sequenced music workstation built from the ground up for touch screens. Synth, sampler, modulation, mixer, effects, and AUv3 plugin hosting — no external keyboard required.</p>
-        </section>
+        <div class="transport boot boot-2" role="presentation" aria-hidden="true">
+            <span><span class="val">120</span> <span class="lbl">BPM</span></span>
+            <span><span class="val">12</span> <span class="lbl">VOICES</span></span>
+            <span><span class="val">52</span> <span class="lbl">FX</span></span>
+            <span><span class="val">AUv3</span></span>
+            <span><span class="led">&#9679;</span> <span class="lbl">COMING&nbsp;SOON</span></span>
+        </div>
 
-        <section>
-            <h2>Product</h2>
+        <section class="boot boot-3">
+            <h2><span class="idx">00</span> About</h2>
+            <p class="lede">Nulltrack is a phone-native audio tracker: a step-sequenced music workstation built from the ground up for touch screens. Synth, sampler, modulation, mixer, effects, and AUv3 plugin hosting — no external keyboard required.</p>
             <p>Nulltrack for iOS is coming to the Apple App Store. Updates will be posted here as the release approaches.</p>
         </section>
 
-        <section>
-            <h2>Support</h2>
-            <p>Found a bug or have a feature request? File it on the <a href="https://github.com/nulltrack/issues-feedback">Nulltrack issue tracker</a>.</p>
-            <p>Questions or feedback? Email <a href="mailto:support@nulltrack.app">support@nulltrack.app</a>.</p>
+        <section class="boot boot-4">
+            <h2><span class="idx">01</span> On screen</h2>
+            <div class="shots">
+                <figure>
+                    <img src="/assets/01_song_grid.png" alt="Song grid: scenes by tracks matrix with named sections" loading="lazy">
+                    <figcaption>Song grid</figcaption>
+                </figure>
+                <figure>
+                    <img src="/assets/02_phrase_editor.png" alt="Phrase editor with note, instrument, velocity and FX columns" loading="lazy">
+                    <figcaption>Phrase editor</figcaption>
+                </figure>
+                <figure>
+                    <img src="/assets/03_bass_synth.png" alt="Bass Synth editor" loading="lazy">
+                    <figcaption>Bass Synth</figcaption>
+                </figure>
+                <figure>
+                    <img src="/assets/04_mixer.png" alt="Mixer with channel strips, sends and inserts" loading="lazy">
+                    <figcaption>Mixer</figcaption>
+                </figure>
+                <figure>
+                    <img src="/assets/05_modulation.png" alt="Modulation editor with LFO and envelopes" loading="lazy">
+                    <figcaption>Modulation</figcaption>
+                </figure>
+            </div>
         </section>
 
-        <footer>
+        <section class="boot boot-5">
+            <h2><span class="idx">02</span> Inside</h2>
+            <div class="steps">
+                <div class="step"><span class="no">00</span><span class="cmd c-amber">SYN</span><span class="desc"><b>Synth engines</b> — dual-oscillator subtractive synth and a dedicated bass synth engine, 12-voice polyphony per track</span></div>
+                <div class="step"><span class="no">01</span><span class="cmd c-copper">SMP</span><span class="desc"><b>Sampler</b> — load your own samples or the factory library, per-track sample playback</span></div>
+                <div class="step"><span class="no">02</span><span class="cmd c-gold">MOD</span><span class="desc"><b>Modulation</b> — LFOs, AHD / ADSR / drum envelopes, velocity, random, key tracking; up to 17 destinations per instrument</span></div>
+                <div class="step"><span class="no">03</span><span class="cmd c-olive">SEQ</span><span class="desc"><b>Sequencer</b> — per-step probability, conditions, transpose, retrigger; polymetric phrase lengths</span></div>
+                <div class="step"><span class="no">04</span><span class="cmd c-khaki">FXC</span><span class="desc"><b>FX commands</b> — three FX columns per step, 52 tracker commands: arps, vibrato, retrigs, stutter, nudge, cut&hellip;</span></div>
+                <div class="step"><span class="no">05</span><span class="cmd c-deep">MIX</span><span class="desc"><b>Mixer</b> — per-track strips, 8 global send buses, 4 insert slots per track, master metering + limiter</span></div>
+                <div class="step"><span class="no">06</span><span class="cmd c-rose">AUV</span><span class="desc"><b>AUv3 hosting</b> — run third-party Audio Unit instruments and effects inside your song, state saved with the project</span></div>            </div>
+        </section>
+
+        <section class="boot boot-6">
+            <h2><span class="idx">03</span> Support</h2>
+            <div class="org-block">
+                <p>Found a bug or have a feature request? File it on the <a href="https://github.com/nulltrack/issues-feedback">Nulltrack issue tracker</a>.</p>
+                <p style="margin-bottom:0">Questions or feedback? Email <a href="mailto:support@nulltrack.app">support@nulltrack.app</a>.</p>
+            </div>
+        </section>
+
+        <footer class="boot boot-6">
             <span>&copy; 2026 DECTET LLC. All rights reserved.</span>
             <span>
                 <a href="/privacy.html">Privacy</a>
-                &nbsp;·&nbsp;
+                &nbsp;&middot;&nbsp;
                 <a href="/terms.html">Terms</a>
             </span>
         </footer>
