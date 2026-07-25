@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nulltrack — Audio tracker for iOS</title>
-    <meta name="description" content="Nulltrack is a phone-native audio tracker for iOS: a step-sequenced music workstation built for touch.">
+    <meta name="description" content="Nulltrack is a phone-native audio tracker for iOS: a step-sequenced music workstation built for touch. Available on the App Store.">
+    <meta name="apple-itunes-app" content="app-id=6780079928">
     <link rel="icon" type="image/png" href="/assets/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -125,6 +126,30 @@
         }
         @keyframes blink { 50% { opacity: 0; } }
 
+        /* ── App Store call to action ──────────────────────────────── */
+        .cta {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            margin-top: 1.9rem;
+        }
+        /* Official Apple badge: never restyled — only sized, per Apple's
+           identity guidelines (min 40px tall, clear space >= 1/10 height). */
+        .badge-link {
+            display: inline-block;
+            padding: 0.4rem;
+            line-height: 0;
+            border-radius: 10px;
+            transition: transform 0.18s ease, filter 0.18s ease;
+        }
+        .badge-link:hover, .badge-link:focus-visible {
+            text-decoration: none;
+            transform: translateY(-2px);
+            filter: drop-shadow(0 0 14px rgba(232, 220, 200, 0.35));
+        }
+        .badge-link:active { transform: translateY(0); }
+        .badge-link img { display: block; height: 54px; width: auto; }
         /* ── Transport-style status bar ────────────────────────────── */
         .transport {
             display: flex;
@@ -286,6 +311,7 @@
             .transport { font-size: 1.15rem; gap: 0.3rem 1rem; }
             .shots img { width: 178px; }
             .step { grid-template-columns: 2.6rem 4.2rem 1fr; padding: 0.55rem 0.7rem; }
+            .badge-link img { height: 48px; }
         }
     </style>
 </head>
@@ -294,6 +320,11 @@
         <header class="brand boot boot-1">
             <img class="wordmark" src="/assets/wordmark.png" alt="NULLTRACK" width="660" height="190">
             <div class="tagline">A mobile-native audio tracker for iOS.<span class="cursor" aria-hidden="true"></span></div>
+            <div class="cta">
+                <a class="badge-link" href="https://apps.apple.com/us/app/nulltrack/id6780079928">
+                    <img src="/assets/app-store-badge-white.svg" alt="Download Nulltrack on the App Store" width="162" height="54">
+                </a>
+            </div>
         </header>
 
         <div class="transport boot boot-2" role="presentation" aria-hidden="true">
@@ -301,13 +332,13 @@
             <span><span class="val">12</span> <span class="lbl">VOICES</span></span>
             <span><span class="val">52</span> <span class="lbl">FX</span></span>
             <span><span class="val">AUv3</span></span>
-            <span><span class="led">&#9679;</span> <span class="lbl">COMING&nbsp;SOON</span></span>
+            <span><span class="led">&#9679;</span> <span class="lbl">OUT&nbsp;NOW</span></span>
         </div>
 
         <section class="boot boot-3">
             <h2><span class="idx">00</span> About</h2>
             <p class="lede">Nulltrack is a phone-native audio tracker: a step-sequenced music workstation built from the ground up for touch screens. Synth, sampler, modulation, mixer, effects, and AUv3 plugin hosting.</p>
-            <p>Nulltrack for iOS is coming to the Apple App Store. Updates will be posted here as the release approaches.</p>
+            <p><strong>Nulltrack is out now on the Apple App Store</strong> — a one-time purchase, with no subscriptions and no accounts. Requires iPhone on iOS 17 or later. <a href="https://apps.apple.com/us/app/nulltrack/id6780079928">Get it on the App Store</a></p>
         </section>
 
         <section class="boot boot-4">
@@ -349,7 +380,19 @@
         </section>
 
         <section class="boot boot-6">
-            <h2><span class="idx">03</span> Support</h2>
+            <h2><span class="idx">03</span> Get&nbsp;it</h2>
+            <div class="org-block" style="text-align:center">
+                <p>Nulltrack for iPhone — a one&#8209;time purchase, no subscriptions.</p>
+                <div class="cta" style="margin-top:1.1rem">
+                    <a class="badge-link" href="https://apps.apple.com/us/app/nulltrack/id6780079928">
+                        <img src="/assets/app-store-badge-white.svg" alt="Download Nulltrack on the App Store" width="162" height="54">
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="boot boot-6">
+            <h2><span class="idx">04</span> Support</h2>
             <div class="org-block">
                 <p>Found a bug or have a feature request? File it on the <a href="https://github.com/nulltrack/issues-feedback">Nulltrack issue tracker</a>.</p>
                 <p style="margin-bottom:0">Questions or feedback? Email <a href="mailto:support@nulltrack.app">support@nulltrack.app</a>.</p>
@@ -359,6 +402,8 @@
         <footer class="boot boot-6">
             <span>&copy; 2026 DECTET LLC. All rights reserved.</span>
             <span>
+                <a href="https://apps.apple.com/us/app/nulltrack/id6780079928">App&nbsp;Store</a>
+                &nbsp;&middot;&nbsp;
                 <a href="/privacy.html">Privacy</a>
                 &nbsp;&middot;&nbsp;
                 <a href="/terms.html">Terms</a>
